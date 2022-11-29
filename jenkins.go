@@ -340,6 +340,19 @@ func (j *Jenkins) GetLabel(ctx context.Context, name string) (*Label, error) {
 	return nil, errors.New("No label found")
 }
 
+func (j *Jenkins) GetSubJobBuild(ctx context.Context, folderName, jobName string, number int64) (*Build, error) {
+	job, err := j.GetSubJob(ctx, folderName, jobName)
+	if err != nil {
+		return nil, err
+	}
+	build, err := job.GetBuild(ctx, number)
+
+	if err != nil {
+		return nil, err
+	}
+	return build, nil
+}
+
 func (j *Jenkins) GetBuild(ctx context.Context, jobName string, number int64) (*Build, error) {
 	job, err := j.GetJob(ctx, jobName)
 	if err != nil {
